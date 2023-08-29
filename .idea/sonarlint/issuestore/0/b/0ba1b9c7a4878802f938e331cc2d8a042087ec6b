@@ -1,0 +1,20 @@
+
+g	java:S112"FDefine and throw a dedicated exception instead of using a generic one.(Ò‚Òéüÿÿÿÿ8èœÄß£1
+c
+java:S1854"ARemove this useless assignment to local variable "minFlightTime".(²±êÃøÿÿÿÿ8ñœÄß£1
+T
+java:S1481"2Remove this unused "minFlightTime" local variable.(²±êÃøÿÿÿÿ8òœÄß£1
+^
+java:S1854"ARemove this useless assignment to local variable "minFlightTime".(¦¸µí8ôœÄß£1
+X
+java:S1854";Remove this useless assignment to local variable "carrier".(Áªİ¦8ôœÄß£1
+[
+java:S1854">Remove this useless assignment to local variable "jsonObject".(ñí¨Ò8ôœÄß£1
+O
+java:S1481"2Remove this unused "minFlightTime" local variable.(¦¸µí8õœÄß£1
+L
+java:S1481"/Remove this unused "jsonObject" local variable.(ñí¨Ò8öœÄß£1
+I
+java:S1481",Remove this unused "carrier" local variable.(Áªİ¦8öœÄß£1
+A
+java:S1168!"$Return an empty map instead of null.(¥¹ï8öœÄß£1
