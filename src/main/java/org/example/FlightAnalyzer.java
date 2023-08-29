@@ -12,53 +12,56 @@ import java.util.*;
 
 public class FlightAnalyzer {
     public static void main(String[] args) {
+        JSONParser parser = new JSONParser();
+        JSONObject jsonObject;
+        JSONArray tickets;
+        
         try {
-            JSONParser parser = new JSONParser();
-            JSONObject jsonObject = (JSONObject) parser.parse(new FileReader("/Users/egorsaprykin/Downloads/tickets.json"));
-            JSONArray tickets = (JSONArray) jsonObject.get("tickets");
-
-            Map<String, Integer> minFlightTime = new HashMap<>();
-            List<BigDecimal> flightPrice = new ArrayList<>();
-
-
-            for (Object ticketObj : tickets) {
-                JSONObject ticket = (JSONObject) ticketObj;
-
-                String origin = (String) ticket.get("origin");
-                String destination = (String) ticket.get("destination");
-                String carrier = (String) ticket.get("carrier");
-
-                if (origin.equals("VVO") && destination.equals("TLV")) {
-                    String departureTime = (String) ticket.get("departure_time");
-                    String arrivalTime = (String) ticket.get("arrival_time");
-
-                    int flightTime = calculateTimeDifferent(departureTime, arrivalTime);
-
-                    if (!minFlightTime.containsKey(carrier) || flightTime < minFlightTime.get(carrier)) {
-                        minFlightTime.put(carrier, flightTime);
-                    }
-
-                    BigDecimal price = BigDecimal.valueOf((Long) ticket.get("price"));
-                    flightPrice.add(price);
-                }
-            }
-
-            BigDecimal averagePrice = flightPrice.stream()
-                    .reduce(BigDecimal.ZERO, BigDecimal::add)
-                    .divide(BigDecimal.valueOf(flightPrice.size()), 2, BigDecimal.ROUND_HALF_UP);
-
-            BigDecimal medianPrice = calculateMedian(flightPrice);
-
-            System.out.println("Minimum flight times between VVO and TLV:");
-            minFlightTime.forEach((carrier, time) ->
-                    System.out.println(carrier + ": " + time + " minutes"));
-
-            System.out.println("\nDifference between average and median flight prices:");
-            System.out.println("Difference: " + (averagePrice.subtract(medianPrice)));
+            jsonObject = (JSONObject) parser.parse(new FileReader("/Users/egorsaprykin/Downloads/tickets.json"));
+            tickets = (JSONArray) jsonObject.get("tickets");
 
         } catch (ParseException | IOException e) {
             throw new RuntimeException(e);
         }
+
+        Map<String, Integer> minFlightTime = new HashMap<>();
+        List<BigDecimal> flightPrice = new ArrayList<>();
+
+
+        for (Object ticketObj : tickets) {
+            JSONObject ticket = (JSONObject) ticketObj;
+
+            String origin = (String) ticket.get("origin");
+            String destination = (String) ticket.get("destination");
+            String carrier = (String) ticket.get("carrier");
+
+            if (origin.equals("VVO") && destination.equals("TLV")) {
+                String departureTime = (String) ticket.get("departure_time");
+                String arrivalTime = (String) ticket.get("arrival_time");
+
+                int flightTime = calculateTimeDifferent(departureTime, arrivalTime);
+
+                if (!minFlightTime.containsKey(carrier) || flightTime < minFlightTime.get(carrier)) {
+                    minFlightTime.put(carrier, flightTime);
+                }
+
+                BigDecimal price = BigDecimal.valueOf((Long) ticket.get("price"));
+                flightPrice.add(price);
+            }
+        }
+
+        BigDecimal averagePrice = flightPrice.stream()
+                .reduce(BigDecimal.ZERO, BigDecimal::add)
+                .divide(BigDecimal.valueOf(flightPrice.size()), 2, BigDecimal.ROUND_HALF_UP);
+
+        BigDecimal medianPrice = calculateMedian(flightPrice);
+
+        System.out.println("Minimum flight times between VVO and TLV:");
+        minFlightTime.forEach((carrier, time) ->
+                System.out.println(carrier + ": " + time + " minutes"));
+
+        System.out.println("\nDifference between average and median flight prices:");
+        System.out.println("Difference: " + (averagePrice.subtract(medianPrice)));
     }
 
     private static BigDecimal calculateMedian(List<BigDecimal> prices) {
